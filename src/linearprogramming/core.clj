@@ -1,5 +1,6 @@
 (ns linearprogramming.core
-  (:use [uncomplicate.neanderthal core native math linalg])
+  (:use [uncomplicate.neanderthal core native math linalg]
+        [uncomplicate.fluokitten.core])
 )
 
 (def c (dv 80 60))
@@ -20,8 +21,16 @@
         target-function-value (mv (trans sol) (dv 0 0 0))
         max-diff (axpy c (scal -1 target-function-value))
         index-of-vector-to-enter (imax max-diff)
+        to-enter-vector (col sol index-of-vector-to-enter)
+        divide (fmap (fn ^double [^double el] (/ 1 el)) to-enter-vector)
+        result (fmap *
+                 initial-values-of-dummy-variables
+                 divide
+                 )
         ]
+    (print to-enter-vector divide result)
     )
+
   )
 
 (simplex c A b)
