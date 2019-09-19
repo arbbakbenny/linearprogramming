@@ -8,6 +8,7 @@
                  [uncomplicate/neanderthal "0.25.6"]
                  [uncomplicate/clojurecuda "0.7.1"]
                  [uncomplicate/fluokitten "0.9.1"]
+                 [net.mikera/core.matrix "0.62.0"]
                  ]
   :repl-options {:init-ns linearprogramming.core}
   :jvm-opts ^:replace [#_"--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED"])
