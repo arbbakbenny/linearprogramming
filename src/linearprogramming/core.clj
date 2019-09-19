@@ -28,6 +28,7 @@
   )
 
 (defn initialize-coefficients
+  "expands coefficients vector with coordinates for dummy variables"
   [coefficients problem-rows]
   (let
     [
@@ -40,17 +41,28 @@
     )
   )
 
+(defn initialize-variables
+  [b coefficients-dim problem-rows]
+  (let [
+        initial-vector (dv (+ problem-rows coefficients-dim))
+        sub-vec (subvector initial-vector coefficients-dim problem-rows)
+        ]
+    (axpy! b sub-vec)
+    initial-vector
+    )
+  )
+
 (defn simplex
   [c                                                        ;; coefficients from target function
    A                                                        ;; matrix with limitations coefficients
    b                                                        ;; limitation values
    ]
   (let [
-        coeficients (initialize-coefficients c)
+        coeficients (initialize-coefficients c (mrows A))
         initialA (initialize-matrix A)
-        identity-matrix (dge 3 3 [1 0 0 0 1 0 0 0 1])
+        initial-base (submatrix initialA )
         initial-values-of-dummy-variables b
-        sol (sv identity-matrix A)
+        sol (sv initial-base A)
         target-function-value (mv (trans sol) (dv 0 0 0))
         max-diff (axpy c (scal -1 target-function-value))
         index-of-vector-to-enter (imax max-diff)
