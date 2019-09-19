@@ -6,6 +6,8 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [uncomplicate/commons "0.8.0"]
                  [uncomplicate/neanderthal "0.25.6"]
-                 [uncomplicate/clojurecuda "0.7.1"]]
+                 [uncomplicate/clojurecuda "0.7.1"]
+                 [uncomplicate.fluokitten "0.9.1"]
+                 ]
   :repl-options {:init-ns linearprogramming.core}
   :jvm-opts ^:replace [#_"--add-opens=java.base/jdk.internal.ref=ALL-UNNAMED"])
