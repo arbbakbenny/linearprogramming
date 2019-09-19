@@ -1,5 +1,5 @@
 (ns linearprogramming.core
-  (:use [uncomplicate.neanderthal core native math linalg]
+  (:use [uncomplicate.neanderthal core native math linalg auxil]
         [uncomplicate.fluokitten.core]
         [clojure.core.matrix :only [identity-matrix]]
         )
@@ -11,14 +11,13 @@
 
 (def b (dv 42000 50000 15000))
 
-(defn initialize
+(defn initialize-matrix
   "returns expanded matrix of the initial problem with identity matrix"
   [matrix]
   (let [
         rows (mrows matrix)
         columns (ncols matrix)
         total (+ rows columns)
-        tm1 (- total 1)
         initializedEmpty (dge rows (+ rows columns))
         identity-matrix (dge rows rows (identity-matrix rows))
         ]
@@ -28,13 +27,27 @@
     )
   )
 
+(defn initialize-coefficients
+  [coefficients problem-rows]
+  (let
+    [
+     initial-dim (dim coefficients)
+     initial-vector (dv (+ initial-dim problem-rows))
+     sub-vec (subvector initial-vector 0 initial-dim)
+     ]
+    (axpy! coefficients sub-vec)
+    initial-vector
+    )
+  )
+
 (defn simplex
   [c                                                        ;; coefficients from target function
    A                                                        ;; matrix with limitations coefficients
    b                                                        ;; limitation values
    ]
   (let [
-        initialA (initialize A)
+        coeficients (initialize-coefficients c)
+        initialA (initialize-matrix A)
         identity-matrix (dge 3 3 [1 0 0 0 1 0 0 0 1])
         initial-values-of-dummy-variables b
         sol (sv identity-matrix A)
@@ -54,5 +67,5 @@
 
   )
 
-(simplex c A b)
+;(simplex c A b)
 
