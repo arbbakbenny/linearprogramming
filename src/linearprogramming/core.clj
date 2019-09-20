@@ -42,6 +42,7 @@
   )
 
 (defn initialize-variables
+  "initialize values of nonbase and base variables and set base to initial value of b"
   [b coefficients-dim problem-rows]
   (let [
         initial-vector (dv (+ problem-rows coefficients-dim))
@@ -52,18 +53,26 @@
     )
   )
 
+(defn solve
+  [baseIndices nonBaseIndeces expandedA expandedCoefficients]
+
+  )
+
 (defn simplex
   [c                                                        ;; coefficients from target function
    A                                                        ;; matrix with limitations coefficients
    b                                                        ;; limitation values
    ]
   (let [
-        coeficients (initialize-coefficients c (mrows A))
-        initialA (initialize-matrix A)
-        initial-base (submatrix initialA )
-        initial-values-of-dummy-variables b
+        addedDimension (mrows A)
+        expandedCoefficients (initialize-coefficients c addedDimension )
+        expandedMatrixA (initialize-matrix A)
+        initial-base (submatrix expandedMatrixA 0 (ncols A) addedDimension  addedDimension )
+        initial-values-of-dummy-variables (initialize-variables b (dim c) addedDimension )
+        non-base-vars (subvector initial-values-of-dummy-variables 0 (ncols A))
+
         sol (sv initial-base A)
-        target-function-value (mv (trans sol) (dv 0 0 0))
+        target-function-value (mv (trans sol) non-base-vars)
         max-diff (axpy c (scal -1 target-function-value))
         index-of-vector-to-enter (imax max-diff)
         to-enter-vector (col sol index-of-vector-to-enter)
