@@ -54,7 +54,7 @@
   )
 
 (defn solve
-  [baseIndices nonBaseIndeces expandedA expandedCoefficients]
+  [baseIndices nonBaseIndices expandedA expandedCoefficients]
 
   )
 
